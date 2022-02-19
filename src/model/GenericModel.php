@@ -42,8 +42,8 @@ class GenericModel {
 
     public function getById($id){
 
+        var_dump("ID:   " . $id);
         $statement = $this->connection->prepare("SELECT * FROM " . $this->table . "  WHERE id = ?");
-
         $statement->execute([$id]);
         $this->connection = null;
         return $statement->fetch(PDO::FETCH_OBJ);
@@ -51,12 +51,10 @@ class GenericModel {
     }
 
     public function getByColumn($column, $value){
-        var_dump("COLUMN: " . $column . " VALUE: " . $value);
-        $statement = $this->connection->prepare("SELECT * FROM ? WHERE ? = ?");
-        $statement->execute([$this->table, $column, $value]);
-        var_dump($statement->fetchAll(PDO::FETCH_ASSOC));
-        //$this->connection = null;
-        return $statement->fetchAll();
+        $statement = $this->connection->prepare("SELECT * FROM " . $this->table . " WHERE " . $column . " = " . $value);
+        $statement->execute();
+        $this->connection = null;
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function deleteById($id){

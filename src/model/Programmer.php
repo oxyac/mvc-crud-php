@@ -20,17 +20,17 @@ class Programmer extends GenericModel
 
     public function getAllByDept($id)
     {
-        var_dump("GETALLBYDEPT ". $id);
+        //var_dump("GETALLBYDEPT ". $id);
         return $this->getByColumn("department_id", $id);
     }
 
-    public function save()
+    public function create()
     {
-        $statement = $this->connection->prepare("INSERT INTO ? 
+        $statement = $this->connection->prepare("INSERT INTO " . $this->table . " 
         (first_name, last_name, level, department_id, phone, email) VALUES (?, ?, ?, ?, ?, ?)");
 
         $result = $statement->execute([
-            $this->table, $this->first_name, $this->last_name,
+            $this->first_name, $this->last_name,
             $this->level, $this->department_id,
             $this->phone, $this->email]);
 
@@ -54,6 +54,7 @@ class Programmer extends GenericModel
     }
 
     public static function parseLevel($progs){
+        //var_dump($progs);
         foreach ($progs as $pData) {
             $i = $pData['id'];
             switch ($pData['level']) {

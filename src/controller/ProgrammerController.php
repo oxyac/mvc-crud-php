@@ -1,33 +1,37 @@
 <?php
-class ProgrammerController{
+
+class ProgrammerController
+{
 
     private $database;
     private $connection;
 
-    public function __construct() {
+    public function __construct()
+    {
         require_once __DIR__ . "/Database.php";
         require_once __DIR__ . "/../model/Programmer.php";
 
-        $this->database=new Database();
-        $this->connection=$this->database->connectDb();
+        $this->database = new Database();
+        $this->connection = $this->database->connectDb();
 
     }
 
 
-    public function run($action){
-        switch($action)
-        {
-            case "new" :
-                $this->newProgrammer();
+    public function run($action)
+    {
+        switch ($action) {
+
+            case "showNew" :
+                $this->showNew();
                 break;
-//            case "alta" :
-//                $this->crear();
-//                break;
+            case "new" :
+                $this->create();
+                break;
             case "details" :
                 $this->details();
                 break;
-            case "actualizar" :
-                $this->actualizar();
+            case "update" :
+                $this->update();
                 break;
             case "delete" :
                 $this->delete();
@@ -38,13 +42,11 @@ class ProgrammerController{
         }
     }
 
-    public function index(){
+    public function index()
+    {
         $proger = new Programmer($this->connection);
-        $result = Programmer::parseLevel(
-            $proger->assignKeys(
-                $proger->getAll()));
+        $result = Programmer::parseLevel($proger->getAll());
         //var_dump($result);
-
 
 
         $this->view("index", array(
@@ -53,38 +55,37 @@ class ProgrammerController{
         ));
     }
 
-    /**
-     * Carga la página principal de bodegas con la lista de
-     * bodegas que consigue del modelo.
-     *
-     */
-    public function details(){
 
+    public function details()
+    {
 
         $proger = new Programmer($this->connection);
-        $result = $proger ->getById($_GET["id"]);
+        $progerObj = $proger->getById($_GET["id"]);
+        var_dump($progerObj);
 
-        $this->view("detalleVino",array(
-            "vino" => $result,
-            "bodega" => $_GET["bodega"],
-            "titulo" => "Detalle Vino"
+
+        $this->view("prgDetails", array(
+            "proger" => $progerObj,
+            "department" => $_GET["department"],
+            "title" => "Programer Details"
         ));
     }
 
-    public function newProgrammer(){
-        $this->view("newProg",array(
-            "programmer" => $_GET["programmer"],
+    public function showNew()
+    {
+        $this->view("newProg", array(
+            "depId" => $_GET["department"],
             "title" => "NEW PROGER"
         ));
     }
 
-    public function delete(){
+    public function delete()
+    {
 
-        $vino = new Vino($this->conexion);
-        //Recuperamos de BBDD la bodega
-        $vino = $vino->deleteById($_GET["id"]);
+        $proger = new Programmer($this->connection);
+        $proger->deleteById($_GET["id"]);
 
-        header("Location: index.php?controller=bodega&action=detalle&id=" . $_GET["bodega"]);
+        header("Location:index.php?controller=department&action=details&id=" . $_GET["department_id"]);
     }
 
     /**
@@ -92,43 +93,40 @@ class ProgrammerController{
      * y vuelve a cargar el index.php.
      *
      */
-    public function crear(){
-        if(isset($_POST["nombre"])){
+    public function create()
+    {
+        if (isset($_POST["first_name"]) && isset($_POST["last_name"])) {
 
-            //Creamos una bodega
-            $vino=new Vino($this->connection);
-            $vino->setNombre($_POST["nombre"]);
-            $vino->setDescripcion($_POST["descripcion"]);
-            $vino->setBodega($_POST["bodega"]);
-            $vino->setTipo($_POST["tipo"]);
-            $vino->setAno($_POST["ano"]);
-            $vino->setAlcohol($_POST["alcohol"]);
-
-            $save = $vino->save();
+            $proger = new Programmer($this->connection);
+            $proger->setId($_POST["id"]);
+            $proger->setFirstName($_POST["first_name"]);
+            $proger->setDepartmentId($_POST["department_id"]);
+            $proger->setLastName($_POST["last_name"]);
+            $proger->setLevel($_POST["level"]);
+            $proger->setPhone($_POST["phone"]);
+            $proger->setEmail($_POST["email"]);
+            $save = $proger->create();
         }
-        header("Location:index.php?controller=bodega&action=detalle&id=".$_POST["bodega"]);
+        header("Location:index.php?controller=department&action=details&id=" . $_POST["department_id"]);
     }
 
-    /**
-     * Actualiza bodega a partir de los parámetros POST
-     * y vuelve a cargar el index.php.
-     *
-     */
-    public function actualizar(){
-        if(isset($_POST["id"])){
 
-            //Creamos un vino
-            $vino=new Vino($this->conexion);
-            $vino->setId($_POST["id"]);
-            $vino->setNombre($_POST["nombre"]);
-            $vino->setDescripcion($_POST["descripcion"]);
-            $vino->setBodega($_POST["bodega"]);
-            $vino->setTipo($_POST["tipo"]);
-            $vino->setAno($_POST["ano"]);
-            $vino->setAlcohol($_POST["alcohol"]);
-            $save=$vino->actualizar();
+    public function update()
+    {
+        if (isset($_POST["id"])) {
+
+
+            $proger = new Programmer($this->connection);
+            $proger->setId($_POST["id"]);
+            $proger->setFirstName($_POST["first_name"]);
+            $proger->setDepartmentId($_POST["department_id"]);
+            $proger->setLastName($_POST["last_name"]);
+            $proger->setLevel($_POST["level"]);
+            $proger->setPhone($_POST["phone"]);
+            $proger->setEmail($_POST["email"]);
+            $save = $proger->update();
         }
-        header("Location:index.php?controller=bodega&action=detalle&id=".$_POST["bodega"]);
+        header("Location:index.php?controller=department&action=details&id=" . $_POST["department_id"]);
     }
 
 
@@ -136,15 +134,15 @@ class ProgrammerController{
      * Crea la vista que le pasemos con los datos indicados.
      *
      */
-    public function view($view,$data){
+    public function view($view, $data)
+    {
         $receivedData = $data;
-        require_once  __DIR__ . "/../view/" . $view . "View.php";
+        //var_dump($data . __DIR__ . "/view/" . $view . "View.php" );
+        require_once __DIR__ . "/../view/" . $view . "View.php";
 
     }
 
 }
-
-
 
 
 ?>

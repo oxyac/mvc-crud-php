@@ -14,12 +14,13 @@ class Department extends GenericModel
     {
         parent::__construct($connection);
         $this->table = TABLE_DEPARTMENTS;
+
     }
 
 
     public function insert()
     {
-        $statement = $this->connection->prepare("INSERT INTO ? 
+        $statement = $this->connection->prepare("INSERT INTO " . $this->table . " 
         (head_id, language, project_name) VALUES (?, ?, ?)");
 
         $result = $statement->execute([
@@ -32,12 +33,14 @@ class Department extends GenericModel
 
     public function update()
     {
-        $statement = $this->connection->prepare("UPDATE ? SET
+
+        var_dump($this->table. $this->head_id. $this->language.
+            $this->project_name. $this->id);
+        $statement = $this->connection->prepare("UPDATE ". $this->table . " SET
         head_id = ?, language = ?, project_name = ? WHERE id= ?");
 
-        $result = $statement->execute([
-            $this->head_id, $this->language, $this->project_name,
-            $this->id]);
+        $result = $statement->execute([ $this->head_id, $this->language,
+            $this->project_name, $this->id]);
 
         $this->connection = null;
 

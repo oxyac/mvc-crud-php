@@ -22,7 +22,7 @@ class DepartmentController{
             case "showNew" :
                 $this->showNew();
                 break;
-            case "new" :
+            case "create" :
                 $this->create();
                 break;
             case "details" :
@@ -41,10 +41,60 @@ class DepartmentController{
     }
 
     public function index(){
+
         $dept = new Department($this->connection);
-        $result = $dept->getAll();
+        $allDepts = $dept->getAll();
+
+        $proger = new Programmer($this->connection);
+        $progers = $proger->getAll();
+
+        foreach ($allDepts as $id => $dept){
+            $allDepts[$id]['progs_count'] = 1;
+            foreach($progers as $proger){
+                if($dept['head_id'] == $proger['id']){
+                    $allDepts[$id]['head_name'] = ucwords($proger['first_name'] . " " . $proger['last_name']);
+                }
+
+
+
+            }
+        }
+        var_dump($allDepts);
+        /*
+  [4]=>
+  array(7) {
+    ["id"]=>
+    int(15)
+    ["first_name"]=>
+    string(8) "sadgsadg"
+    ["last_name"]=>
+    string(5) "wegwe"
+    ["level"]=>
+    int(2)
+    ["department_id"]=>
+    int(2)
+    ["phone"]=>
+    int(3425432)
+    ["email"]=>
+    string(7) "2345432"
+  }*/
+
+        /*
+  [0]=>
+  array(4) {
+    ["id"]=>
+    int(1)
+    ["head_id"]=>
+    int(12)
+    ["language"]=>
+    string(4) "PHP2"
+    ["project_name"]=>
+    string(5) "USSD2"
+  }*/
+
+
         $this->view("index", array(
-            "departments" => $result,
+            "departments" => $allDepts,
             "title" => "ALL ARTISTS"
         ));
     }
@@ -54,22 +104,34 @@ class DepartmentController{
 
 
         $dept = new Department($this->connection);
-        $result = $dept ->getById($_GET["id"]);
+        $departObj = $dept ->getById($_GET["id"]);
+        $dept->setHeadId($departObj->head_id);
 
         $proger = new Programmer($this->connection);
-        $progers = $proger->getAllByDept($_GET['id']);
+        $progers = Programmer::parseLevel($proger->assignKeys($proger->getAllByDept($_GET['id'])));
 
-        var_dump($progers);
+        $headId = $dept->getHeadId();
+
+
+        var_dump( "->" . $progers . "<-");
+        var_dump($departObj);
 
         $this->view("depDetails",array(
-            "departmentId" => $result,
+            "department" => $departObj,
             "progers" => $progers,
+            "head_id" => $headId,
             "title" => "Department Details"
         ));
     }
 
     public function showNew(){
+
+        $proger = new Programmer($this->connection);
+        $progers = $proger->getAll();
+
+
         $this->view("newDep",array(
+            "progers"=> $progers,
             "title" => "NEW DEPARTMENT"
         ));
     }

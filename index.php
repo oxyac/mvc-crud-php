@@ -6,7 +6,7 @@ function loadController($controller){
 
     $controller=ucwords($controller).'Controller';
 
-    $uriController='controller/' . $controller . '.php';
+    $uriController='src/controller/' . $controller . '.php';
 
     if(!is_file($uriController)) {
         $uriController='src/controller/'.ucwords(CONTROLLER_DEFAULT).'Controller.php';
@@ -29,7 +29,7 @@ function throwAction($controllerObj) {
 
 
 if(isset($_GET["controller"])){
-    var_dump($_GET["controller"]);
+    //var_dump("NOT DEFAULT " . $_GET["controller"]);
     $controllerObj=loadController($_GET["controller"]);
 
 }else{
