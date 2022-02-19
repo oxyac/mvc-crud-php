@@ -17,20 +17,20 @@ class ProgrammerController{
     public function run($action){
         switch($action)
         {
-            case "newProgrammer" :
+            case "new" :
                 $this->newProgrammer();
                 break;
-            case "alta" :
-                $this->crear();
-                break;
-            case "detalle" :
-                $this->detalle();
+//            case "alta" :
+//                $this->crear();
+//                break;
+            case "details" :
+                $this->details();
                 break;
             case "actualizar" :
                 $this->actualizar();
                 break;
-            case "borrar" :
-                $this->borrar();
+            case "delete" :
+                $this->delete();
                 break;
             default:
                 $this->index();
@@ -40,10 +40,15 @@ class ProgrammerController{
 
     public function index(){
         $proger = new Programmer($this->connection);
-        $result = $proger->getAll();
+        $result = Programmer::parseLevel(
+            $proger->assignKeys(
+                $proger->getAll()));
+        //var_dump($result);
+
+
 
         $this->view("index", array(
-            "programmers" => $_GET[$result],
+            "programmers" => $result,
             "title" => "ALL ARTISTS"
         ));
     }
@@ -53,7 +58,7 @@ class ProgrammerController{
      * bodegas que consigue del modelo.
      *
      */
-    public function detalle(){
+    public function details(){
 
 
         $proger = new Programmer($this->connection);
@@ -67,15 +72,14 @@ class ProgrammerController{
     }
 
     public function newProgrammer(){
-        $this->view("newProgrammer",array(
+        $this->view("newProg",array(
             "programmer" => $_GET["programmer"],
-            "titulo" => "NEW PROGER"
+            "title" => "NEW PROGER"
         ));
     }
 
-    public function borrar(){
+    public function delete(){
 
-        //Creamos el objeto bodega
         $vino = new Vino($this->conexion);
         //Recuperamos de BBDD la bodega
         $vino = $vino->deleteById($_GET["id"]);

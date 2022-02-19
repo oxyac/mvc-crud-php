@@ -1,16 +1,17 @@
 <?php
+
+
 class Database{
     private $driver;
     private $host, $user, $pass, $database;
 
     public function __construct() {
-        require_once '../config/db.php';
 
-        $this->driver=DB_DRIVER;
-        $this->host=DB_HOST;
-        $this->user=DB_USER;
-        $this->pass=DB_PASS;
-        $this->database=DB_DATABASE;
+        $this->driver="mysql";
+        $this->host="localhost";
+        $this->user="og";
+        $this->pass="ghimpolism";
+        $this->database="og_db";
     }
 
     public function connectDb(){

@@ -23,14 +23,27 @@ class GenericModel {
         $statement = $this->connection->prepare("SELECT * FROM " . $this->table);
         $statement->execute();
         $this->connection = null;
-        return $statement->fetchAll();
 
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+
+
+    }
+
+    //assignKeys($allProgs: Programmer[]) индексирует внешний массив по полю id внутреннего массива
+    public function assignKeys($allProgs){
+        //var_dump($allProgs);
+        foreach($allProgs as $arrId => $prog){
+            $allProgs[$prog['id']]= $prog;
+            unset($allProgs[$arrId]);
+        }
+        return $allProgs;
     }
 
 
     public function getById($id){
 
         $statement = $this->connection->prepare("SELECT * FROM " . $this->table . "  WHERE id = ?");
+
         $statement->execute([$id]);
         $this->connection = null;
         return $statement->fetch(PDO::FETCH_OBJ);
@@ -38,8 +51,10 @@ class GenericModel {
     }
 
     public function getByColumn($column, $value){
-        $statement = $this->connection->prepare("SELECT * FROM " . $this->table . " WHERE ? = ?");
-        $statement->execute([$column, $value]);
+        var_dump("COLUMN: " . $column . " VALUE: " . $value);
+        $statement = $this->connection->prepare("SELECT * FROM ? WHERE ? = ?");
+        $statement->execute([$this->table, $column, $value]);
+        var_dump($statement->fetchAll(PDO::FETCH_ASSOC));
         //$this->connection = null;
         return $statement->fetchAll();
     }

@@ -20,6 +20,7 @@ class Programmer extends GenericModel
 
     public function getAllByDept($id)
     {
+        var_dump("GETALLBYDEPT ". $id);
         return $this->getByColumn("department_id", $id);
     }
 
@@ -50,6 +51,31 @@ class Programmer extends GenericModel
         $this->connection = null;
 
         return $result;
+    }
+
+    public static function parseLevel($progs){
+        foreach ($progs as $pData) {
+            $i = $pData['id'];
+            switch ($pData['level']) {
+
+                case 1:
+
+                    $progs[$i]['level']  =  'Junior';
+                    break;
+                case 2:
+                    $progs[$i]['level'] =  'Middle';
+                    break;
+                case 3:
+                    $progs[$i]['level'] =  'Senior';
+                    break;
+                default:
+                    $progs[$i]['level'] =  'Junior';
+            }
+        }
+
+        return $progs;
+
+
     }
 
     /**

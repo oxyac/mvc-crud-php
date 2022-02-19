@@ -17,7 +17,7 @@ class Department extends GenericModel
     }
 
 
-    public function save()
+    public function insert()
     {
         $statement = $this->connection->prepare("INSERT INTO ? 
         (head_id, language, project_name) VALUES (?, ?, ?)");

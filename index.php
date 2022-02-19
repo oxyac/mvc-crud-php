@@ -1,18 +1,7 @@
 <?php
 require_once 'src/config/global.php';
 
-if(isset($_GET["controller"])){
-
-    $controllerObj=loadController($_GET["controller"]);
-
-}else{
-
-    var_dump(loadController(CONTROLLER_DEFAULT));
-    $controllerObj=loadController(CONTROLLER_DEFAULT);
-}
-
-throwAction($controllerObj);
-
+//Назначаем расположение скрипта
 function loadController($controller){
 
     $controller=ucwords($controller).'Controller';
@@ -22,12 +11,14 @@ function loadController($controller){
     if(!is_file($uriController)) {
         $uriController='src/controller/'.ucwords(CONTROLLER_DEFAULT).'Controller.php';
     }
+    var_dump("CONTROLLER: " . $uriController);
 
-    var_dump($uriController);
+    //добавляем скрипт запрошенного контроллера
     require_once $uriController;
     return new $controller();
 }
 
+//выстреливаем новый Экшн
 function throwAction($controllerObj) {
     if(isset($_GET["action"])){
         $controllerObj->run($_GET["action"]);
@@ -35,3 +26,17 @@ function throwAction($controllerObj) {
         $controllerObj->run(ACTION_DEFAULT);
     }
 }
+
+
+if(isset($_GET["controller"])){
+    var_dump($_GET["controller"]);
+    $controllerObj=loadController($_GET["controller"]);
+
+}else{
+    echo $_GET["controller"];
+    $controllerObj=loadController(CONTROLLER_DEFAULT);
+}
+
+//говорим контроллеру чекнуть заголовок "action"
+throwAction($controllerObj);
+
