@@ -1,5 +1,6 @@
 <?php
-require_once __DIR__ . "/GenericModel.php";
+
+namespace App\Model;
 
 class Programmer extends GenericModel
 {
@@ -18,6 +19,31 @@ class Programmer extends GenericModel
         $this->table = TABLE_PROGRAMMERS;
     }
 
+    public function getByColumn($allProgs, $depId)
+    {
+        $progByDept = [];
+
+        foreach($allProgs as $prog){
+            if($prog['department_id'] == (int)$depId){
+                $progByDept[] = $prog;
+            }
+        }
+
+        return $progByDept;
+    }
+
+    public function progersNotInDept($team, $allProgs){
+
+
+        foreach ($allProgs as $id => $prog){
+            if(in_array($prog, $team)){
+                unset($allProgs[$id]);
+            }
+        }
+
+        return $allProgs;
+    }
+
     public function getAllByDept($id)
     {
         //var_dump("GETALLBYDEPT ". $id);
@@ -29,17 +55,23 @@ class Programmer extends GenericModel
         $statement = $this->connection->prepare("INSERT INTO " . $this->table . " 
         (first_name, last_name, level, department_id, phone, email) VALUES (?, ?, ?, ?, ?, ?)");
 
+        var_dump([
+            $this->first_name, $this->last_name,
+            $this->level, (int)$this->department_id,
+            (int)$this->phone, $this->email]);
+
         $result = $statement->execute([
             $this->first_name, $this->last_name,
-            $this->level, $this->department_id,
-            $this->phone, $this->email]);
+            $this->level, (int)$this->department_id,
+            (int)$this->phone, $this->email]);
 
         $this->connection = null;
 
         return $result;
     }
 
-    public function update(){
+    public function update()
+    {
         $statement = $this->connection->prepare("UPDATE ? SET
         first_name = ?, last_name = ?, level = ?, department_id=?, phone=?, email=? WHERE id= ?");
 
@@ -53,7 +85,21 @@ class Programmer extends GenericModel
         return $result;
     }
 
-    public static function parseLevel($progs){
+    public function assignDepartment(){
+        $statement = $this->connection->prepare("UPDATE " . $this->table ." SET 
+        department_id = ? WHERE id = ?");
+
+        $result = $statement->execute([
+            $this->department_id, $this->id
+        ]);
+
+        $this->connection = null;
+
+        return $result;
+    }
+
+    public static function parseLevel($progs)
+    {
         //var_dump($progs);
         foreach ($progs as $pData) {
             $i = $pData['id'];
@@ -61,22 +107,36 @@ class Programmer extends GenericModel
 
                 case 1:
 
-                    $progs[$i]['level']  =  'Junior';
+                    $progs[$i]['level'] = 'Junior';
                     break;
                 case 2:
-                    $progs[$i]['level'] =  'Middle';
+                    $progs[$i]['level'] = 'Middle';
                     break;
                 case 3:
-                    $progs[$i]['level'] =  'Senior';
+                    $progs[$i]['level'] = 'Senior';
                     break;
                 default:
-                    $progs[$i]['level'] =  'Junior';
+                    $progs[$i]['level'] = 'Junior';
             }
         }
 
         return $progs;
 
 
+    }
+
+    public function parseDepartmentName($progers, $depts)
+    {
+        foreach ($progers as $id => $proger) {
+
+            foreach ($depts as $dept) {
+                if ($proger['department_id'] == $dept['id']) {
+                    $progers[$id]['on_project'] = ucwords($dept['project_name']);
+                }
+            }
+        }
+
+        return $progers;
     }
 
     /**

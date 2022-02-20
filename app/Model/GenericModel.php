@@ -1,24 +1,38 @@
 <?php
 
-class GenericModel {
+namespace App\Model;
+
+use Exception;
+use PDO;
+
+class GenericModel
+{
     protected $table = "";
     protected $connection;
     protected $id;
 
-    public function __construct($connection) {
+    public function __construct($connection)
+    {
         $this->connection = $connection;
+//        var_dump($this->connection);
+        $this->table = TABLE_PROGRAMMERS;
 
     }
 
-    public function getId() {
+    public function getId()
+    {
         return $this->id;
     }
 
-    public function setId($id) {
+    public function setId($id)
+    {
         $this->id = $id;
     }
 
-    public function getAll(){
+    public function getAll()
+    {
+
+
 
         $statement = $this->connection->prepare("SELECT * FROM " . $this->table);
         $statement->execute();
@@ -30,19 +44,35 @@ class GenericModel {
     }
 
     //assignKeys($allProgs: Programmer[]) индексирует внешний массив по полю id внутреннего массива
-    public function assignKeys($allProgs){
-        //var_dump($allProgs);
-        foreach($allProgs as $arrId => $prog){
-            $allProgs[$prog['id']]= $prog;
+    public function assignKeys($allProgs)
+    {
+
+        foreach ($allProgs as $arrId => $prog) {
+            $allProgs[$prog['id']] = $prog;
             unset($allProgs[$arrId]);
         }
         return $allProgs;
     }
 
+    public function parseHeadName($deptArr, $progers)
+    {
 
-    public function getById($id){
+        foreach ($deptArr as $id => $dept) {
+            $deptArr[$id]['progs_count'] = 1;
+            foreach ($progers as $proger) {
+                if ($dept['head_id'] == $proger['id']) {
+                    $deptArr[$id]['head_name'] = ucwords($proger['first_name'] . " " . $proger['last_name']);
+                }
+            }
+        }
 
-        var_dump("ID:   " . $id);
+        return $deptArr;
+    }
+
+
+    public function getById($id)
+    {
+
         $statement = $this->connection->prepare("SELECT * FROM " . $this->table . "  WHERE id = ?");
         $statement->execute([$id]);
         $this->connection = null;
@@ -50,14 +80,20 @@ class GenericModel {
 
     }
 
-    public function getByColumn($column, $value){
+
+    public function getByColumn($column, $value)
+    {
         $statement = $this->connection->prepare("SELECT * FROM " . $this->table . " WHERE " . $column . " = " . $value);
+
         $statement->execute();
         $this->connection = null;
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function deleteById($id){
+
+
+    public function deleteById($id)
+    {
         try {
             $statement = $this->connection->prepare("DELETE FROM " . $this->table . " WHERE id = ?");
             $statement->execute([$id]);
@@ -68,10 +104,11 @@ class GenericModel {
         }
     }
 
-    public function deleteByColumn($column,$value){
+    public function deleteByColumn($column, $value)
+    {
         try {
             $statement = $this->connection->prepare("DELETE FROM " . $this->table . " WHERE ? = ?");
-            $statement->execute([$column,$value]);
+            $statement->execute([$column, $value]);
             $this->connection = null;
         } catch (Exception $e) {
             echo ' ---COULD NOT DELETE COLUMN--- ' . $e->getMessage();

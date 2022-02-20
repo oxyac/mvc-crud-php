@@ -1,6 +1,7 @@
 <?php
 
-require_once __DIR__ . "/GenericModel.php";
+namespace App\Model;
+
 
 class Department extends GenericModel
 {
@@ -34,18 +35,28 @@ class Department extends GenericModel
     public function update()
     {
 
-        var_dump($this->table. $this->head_id. $this->language.
-            $this->project_name. $this->id);
-        $statement = $this->connection->prepare("UPDATE ". $this->table . " SET
+
+        $statement = $this->connection->prepare("UPDATE " . $this->table . " SET
         head_id = ?, language = ?, project_name = ? WHERE id= ?");
 
-        $result = $statement->execute([ $this->head_id, $this->language,
+        $result = $statement->execute([$this->head_id, $this->language,
             $this->project_name, $this->id]);
 
         $this->connection = null;
 
         return $result;
     }
+
+    //TODO
+//    public function countProgs(array $allDepts, array $progers)
+//    {
+//        $progPerDept = [];
+//        foreach ($allDepts as $dept) {
+//            foreach ($progers as $proger){
+//
+//            }
+//        }
+//    }
 
     /**
      * @return mixed
@@ -94,4 +105,6 @@ class Department extends GenericModel
     {
         $this->project_name = $project_name;
     }
+
+
 }

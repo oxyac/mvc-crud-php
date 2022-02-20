@@ -1,5 +1,9 @@
 <?php
+namespace App\Controller;
 
+use PDO;
+use PDOException;
+use Exception;
 
 class Database{
     private $driver;

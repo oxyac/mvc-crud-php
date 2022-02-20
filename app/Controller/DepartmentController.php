@@ -1,13 +1,20 @@
 <?php
+
+
+namespace App\Controller;
+
+use App\Model\Programmer;
+use App\Model\Department;
+
+//require_once 'Database.php';
+
 class DepartmentController{
 
     private $database;
     private $connection;
 
     public function __construct() {
-        require_once __DIR__ . "/Database.php";
-        require_once __DIR__ . "/../model/Department.php";
-        require_once __DIR__ . "/../model/Programmer.php";
+
 
         $this->database=new Database();
         $this->connection=$this->database->connectDb();
@@ -43,57 +50,24 @@ class DepartmentController{
     public function index(){
 
         $dept = new Department($this->connection);
-        $allDepts = $dept->getAll();
-
         $proger = new Programmer($this->connection);
-        $progers = $proger->getAll();
-
-        foreach ($allDepts as $id => $dept){
-            $allDepts[$id]['progs_count'] = 1;
-            foreach($progers as $proger){
-                if($dept['head_id'] == $proger['id']){
-                    $allDepts[$id]['head_name'] = ucwords($proger['first_name'] . " " . $proger['last_name']);
-                }
 
 
+        $allDepts = $dept->assignKeys($dept->getAll());
 
-            }
-        }
-        var_dump($allDepts);
-        /*
-  [4]=>
-  array(7) {
-    ["id"]=>
-    int(15)
-    ["first_name"]=>
-    string(8) "sadgsadg"
-    ["last_name"]=>
-    string(5) "wegwe"
-    ["level"]=>
-    int(2)
-    ["department_id"]=>
-    int(2)
-    ["phone"]=>
-    int(3425432)
-    ["email"]=>
-    string(7) "2345432"
-  }*/
+        $progers = Programmer::parseLevel($proger->assignKeys($proger->getAll()));
+        $allDepts = $dept->parseHeadName($allDepts, $progers);
 
-        /*
-  [0]=>
-  array(4) {
-    ["id"]=>
-    int(1)
-    ["head_id"]=>
-    int(12)
-    ["language"]=>
-    string(4) "PHP2"
-    ["project_name"]=>
-    string(5) "USSD2"
-  }*/
+        //$progPerDept = $dept->countProgs($allDepts, $progers);
+
+        $progers = $proger->parseDepartmentName($progers, $allDepts);
+
+
+
 
 
         $this->view("index", array(
+            "progers" => $progers,
             "departments" => $allDepts,
             "title" => "ALL ARTISTS"
         ));
@@ -104,21 +78,26 @@ class DepartmentController{
 
 
         $dept = new Department($this->connection);
-        $departObj = $dept ->getById($_GET["id"]);
-        $dept->setHeadId($departObj->head_id);
+        $deptDetails = $dept ->getById($_GET["id"]);
+        $dept->setHeadId($deptDetails->head_id);
 
         $proger = new Programmer($this->connection);
-        $progers = Programmer::parseLevel($proger->assignKeys($proger->getAllByDept($_GET['id'])));
+        $allProgs = $proger->getAll();
+
+        $progersByDept = $proger->getByColumn($allProgs, $_GET['id']);
+        $progersToBeAdded = $proger->progersNotInDept($progersByDept, $allProgs);
+        $team = Programmer::parseLevel($proger->assignKeys($progersByDept));
 
         $headId = $dept->getHeadId();
 
 
-        var_dump( "->" . $progers . "<-");
-        var_dump($departObj);
+//        var_dump( "->" . $team . "<-");
+//        var_dump($deptDetails);
 
         $this->view("depDetails",array(
-            "department" => $departObj,
-            "progers" => $progers,
+            "progers" => $progersToBeAdded,
+            "department" => $deptDetails,
+            "team" => $team,
             "head_id" => $headId,
             "title" => "Department Details"
         ));
@@ -169,7 +148,7 @@ class DepartmentController{
             $dept->setProjectName($_POST["project_name"]);
             $save = $dept->update();
         }
-        header("Location:index.php?controller=department&action=details&id=".$_POST["id"]);
+        header("Location:index.php?Controller=department&action=details&id=".$_POST["id"]);
     }
 
 

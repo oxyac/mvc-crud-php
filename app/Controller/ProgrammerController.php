@@ -1,4 +1,8 @@
 <?php
+namespace App\Controller;
+
+use App\Model\Programmer;
+use App\Model\Department;
 
 class ProgrammerController
 {
@@ -8,8 +12,6 @@ class ProgrammerController
 
     public function __construct()
     {
-        require_once __DIR__ . "/Database.php";
-        require_once __DIR__ . "/../model/Programmer.php";
 
         $this->database = new Database();
         $this->connection = $this->database->connectDb();
@@ -24,7 +26,7 @@ class ProgrammerController
             case "showNew" :
                 $this->showNew();
                 break;
-            case "new" :
+            case "create" :
                 $this->create();
                 break;
             case "details" :
@@ -35,6 +37,9 @@ class ProgrammerController
                 break;
             case "delete" :
                 $this->delete();
+                break;
+            case "assign":
+                $this->assign();
                 break;
             default:
                 $this->index();
@@ -55,18 +60,44 @@ class ProgrammerController
         ));
     }
 
+    public function assign()
+    {
+        if(isset($_POST['id_depId'])){
+
+            $proger = new Programmer($this->connection);
+
+            $prog_dep = explode('&', $_POST['id_depId']);
+
+            $prog_id = $prog_dep[0];
+            $dep_id = $prog_dep[1];
+
+            $proger->setId($prog_id);
+            $proger->setDepartmentId($dep_id);
+
+            $proger->assignDepartment();
+
+            header("Location:index.php?controller=department&action=details&id=" . $dep_id);
+        }
+        else{
+            header("Location:index.php");
+        }
+    }
+
 
     public function details()
     {
 
         $proger = new Programmer($this->connection);
         $progerObj = $proger->getById($_GET["id"]);
-        var_dump($progerObj);
+
+        $dept = new Department($this->connection);
+        $depts = $dept->getAll();
 
 
         $this->view("prgDetails", array(
+            "depts" => $depts,
             "proger" => $progerObj,
-            "department" => $_GET["department"],
+            "depId" => $_GET["department"],
             "title" => "Programer Details"
         ));
     }
@@ -85,7 +116,7 @@ class ProgrammerController
         $proger = new Programmer($this->connection);
         $proger->deleteById($_GET["id"]);
 
-        header("Location:index.php?controller=department&action=details&id=" . $_GET["department_id"]);
+        header("Location:index.php");
     }
 
     /**
@@ -107,7 +138,7 @@ class ProgrammerController
             $proger->setEmail($_POST["email"]);
             $save = $proger->create();
         }
-        header("Location:index.php?controller=department&action=details&id=" . $_POST["department_id"]);
+        header("Location:index.php");
     }
 
 
@@ -126,7 +157,7 @@ class ProgrammerController
             $proger->setEmail($_POST["email"]);
             $save = $proger->update();
         }
-        header("Location:index.php?controller=department&action=details&id=" . $_POST["department_id"]);
+        header("Location:index.php");
     }
 
 
