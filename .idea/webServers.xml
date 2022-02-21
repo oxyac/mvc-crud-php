@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="244e8d22-4f34-4300-bab4-6bb2aa55f713" name="test" url="http://172.16.100.226">
+        <fileTransfer host="172.16.100.226" port="22">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+      <webServer id="96e9b523-4391-4e5a-a4ac-b498db0db150" name="asd" url="http://172.16.100.226/SCRIPTS/o.ghimp/">
+        <fileTransfer rootFolder="/SCRIPTS/o.ghimp" accessType="SFTP" host="172.16.100.226" port="22" sshConfigId="490ab0a3-7e60-4585-9667-cf1c55793596" sshConfig="o.ghimp@172.16.100.226:22 key" keyPair="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
