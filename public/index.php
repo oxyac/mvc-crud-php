@@ -6,26 +6,19 @@ use Conf\Globals;
 require_once '../vendor/autoload.php';
 
 
-function throwAction($controllerObj) {
-    if(isset($_GET["action"])){
-        $controllerObj->run($_GET["action"]);
-    }else{
-        $controllerObj->run(Globals::ACTION_DEFAULT);
-    }
-}
 
-function getFullClassName($classStr){
+function getNamespace($classStr){
     return 'App\Controller\\' . $classStr . 'Controller';
 }
 
 
 if(isset($_GET["controller"])){
 
-    $controller =  getFullClassName(ucwords( $_GET["controller"]));
+    $controller =  getNamespace(ucwords( $_GET["controller"]));
 
     if (!class_exists($controller)) {
 
-        $controller =  getFullClassName(ucwords( Globals::CONTROLLER_DEFAULT));
+        $controller =  getNamespace(ucwords( Globals::CONTROLLER_DEFAULT));
 
         $controllerObj = new $controller();
     }
@@ -34,9 +27,12 @@ if(isset($_GET["controller"])){
 
 
 }else{
-    $controller =   getFullClassName(ucwords( Globals::CONTROLLER_DEFAULT));
+
+    $controller =   getNamespace(ucwords( Globals::CONTROLLER_DEFAULT));
     $controllerObj = new DepartmentController();
 }
 
-throwAction($controllerObj);
+isset($_GET["action"]) ?
+    $controllerObj->run($_GET["action"]) :
+    $controllerObj->run(Globals::ACTION_DEFAULT);
 

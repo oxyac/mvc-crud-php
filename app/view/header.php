@@ -2,16 +2,11 @@
 
 <head>
     <title>UNIFUN - IT DEPARTMENT</title>
-    <style>
-        .wrapper {
-            width: 600px;
-            margin: 0 auto;
-        }
 
-        table tr td:last-child {
-            width: 120px;
-        }
-    </style>
 </head>
 
-<body>
+<div>
+    <h1>Manage Departments With Ease</h1>
+</div>
+<hr/>
+

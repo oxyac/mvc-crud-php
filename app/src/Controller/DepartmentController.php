@@ -30,6 +30,9 @@ class DepartmentController
             case "delete":
                 $this->delete();
                 break;
+            case "setHead":
+                $this->setHead();
+                break;
             default:
                 $this->index();
                 break;
@@ -48,11 +51,8 @@ class DepartmentController
         $progers = Programmer::parseLevel($proger->assignKeys($proger->getAll()));
 
         $allDepts = $dept->parseHeadName($dept->assignKeys($dept->getAll()), $progers);
-        //$allDepts = $dept->parseHeadName($allDepts, $progers);
 
-
-        // var_dump($allDepts);
-        //$progerCountPerDept = $dept->countProgs($allDepts, $progers);
+        $progerCountPerDept = $dept->countProgs($allDepts, $progers);
 
         $progers = $proger->parseDepartmentName($progers, $allDepts);
 
@@ -61,6 +61,7 @@ class DepartmentController
 
 
         $this->view("index", array(
+            "depId_count" => $progerCountPerDept,
             "progers" => $progers,
             "departments" => $allDepts,
             "title" => "ALL ARTISTS"
@@ -80,14 +81,15 @@ class DepartmentController
         $allProgs = $proger->getAll();
 
         $progersByDept = $proger->getByColumn($allProgs, $_GET['id']);
-        $progersToBeAdded = $proger->progersNotInDept($progersByDept, $allProgs);
         $team = Programmer::parseLevel($proger->assignKeys($progersByDept));
+
+        $unassignedProgs = $proger->fetchUnassignedProgers($allProgs);
 
         $headId = $dept->getHeadId();
 
 
         $this->view("depDetails", array(
-            "progers" => $progersToBeAdded,
+            "progers" => $unassignedProgs,
             "department" => $deptDetails,
             "team" => $team,
             "head_id" => $headId,
@@ -108,6 +110,25 @@ class DepartmentController
         ));
     }
 
+    public function setHead(){
+
+
+        $dept = new Department();
+
+
+        $prog_id = $_GET["id"];
+        $dep_id = $_GET['depId'];
+        var_dump($dep_id, " ",  $prog_id);
+
+
+        $dept->setId($dep_id);
+        $dept->setHeadId($prog_id);
+
+        $dept->updateHeadId();
+
+        header("Location:index.php?controller=department&action=details&id=" . $dep_id);
+    }
+
     public function delete()
     {
 
@@ -124,7 +145,6 @@ class DepartmentController
 
             $dept = new Department();
             $dept->setId($_POST["id"]);
-            $dept->setHeadId($_POST["head_id"]);
             $dept->setLanguage($_POST["language"]);
             $dept->setProjectName($_POST["project_name"]);
             $save = $dept->insert();
@@ -139,7 +159,6 @@ class DepartmentController
 
             $dept = new Department();
             $dept->setId($_POST["id"]);
-            $dept->setHeadId($_POST["head_id"]);
             $dept->setLanguage($_POST["language"]);
             $dept->setProjectName($_POST["project_name"]);
             $save = $dept->update();

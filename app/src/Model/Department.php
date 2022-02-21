@@ -28,7 +28,7 @@ class Department extends GenericModel
         (head_id, language, project_name) VALUES (?, ?, ?)");
 
         $result = $statement->execute([
-            $this->head_id, $this->language, $this->project_name]);
+            null, $this->language, $this->project_name]);
 
         $this->connection = null;
 
@@ -40,9 +40,9 @@ class Department extends GenericModel
 
 
         $statement = $this->connection->prepare("UPDATE " . $this->table . " SET
-        head_id = ?, language = ?, project_name = ? WHERE id= ?");
+        language = ?, project_name = ? WHERE id= ?");
 
-        $result = $statement->execute([$this->head_id, $this->language,
+        $result = $statement->execute([$this->language,
             $this->project_name, $this->id]);
 
         $this->connection = null;
@@ -51,14 +51,18 @@ class Department extends GenericModel
     }
 
 
-    public function countProgs(array $allDepts, array $progers)
+    public function countProgs(array $allDepts, array $progers) : array
     {
-        $progPerDept = [];
-        foreach ($allDepts as $dept) {
-            foreach ($progers as $proger) {
 
+        $progPerDeptId = [];
+        foreach ($progers as $proger) {
+            foreach ($allDepts as $dept) {
+                if($proger['department_id'] == $dept['id']){
+                    $progPerDeptId[$dept['id']]++;
+                }
             }
         }
+        return $progPerDeptId;
     }
 
     public function deleteById($id)
@@ -77,6 +81,20 @@ class Department extends GenericModel
             echo ' ---COULD NOT DELETE--- ' . $e->getMessage();
             return -1;
         }
+    }
+
+    public function updateHeadId()
+    {
+
+
+        $statement = $this->connection->prepare("UPDATE " . $this->table . " SET
+        head_id = ? WHERE id= ?");
+
+        $result = $statement->execute([$this->head_id, $this->id]);
+
+        $this->connection = null;
+
+        return $result;
     }
 
     /**
@@ -126,6 +144,8 @@ class Department extends GenericModel
     {
         $this->project_name = $project_name;
     }
+
+
 
 
 }

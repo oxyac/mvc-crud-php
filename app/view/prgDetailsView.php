@@ -6,13 +6,13 @@
                 <h3>Artist Details</h3>
             </div>
             <div>
-                <?php
 
-                $returnURL = "index.php?Controller=department&action=details&id=" . $receivedData['proger']->department_id;
-                $deleteURL = "index.php?Controller=department&action=delete&id=" . $receivedData['proger']->id .
-                    "&department=" . $receivedData['proger']->department_id;
+                <?php
+                $deleteURL = "index.php?controller=programmer&action=delete&id=" . $receivedData['proger']->id;
                 ?>
+
                 <script>
+
                     function enableA() {
                         document.getElementById('first_name').disabled = false;
                         document.getElementById('last_name').disabled = false;
@@ -23,18 +23,29 @@
                         document.getElementById('department_id').disabled = false;
                         document.getElementById('assText').innerHTML = 'Assign To';
 
-                    }</script>
-                <button onclick="enableA()" id="disable" class="btn btn-outline-warning"><i class="fa fa-edit"
-                                                                                      aria-hidden="true"></i>&nbsp;&nbsp;Edit</button>
-                <a href="<?php echo $returnURL ?>" class="btn btn-outline-primary"><i class="fa fa-arrow-left"
-                                                                                      aria-hidden="true"></i>&nbsp;&nbsp;Go
-                    Back</a>
-                <a class="btn btn-outline-danger" href="<?php echo $deleteURL ?>"><i class="fa fa-trash-o"
-                                                                                     aria-hidden="true"></i>&nbsp;&nbsp;Delete</a>
+                    }
+
+                </script>
+
+                <button onclick="enableA()" id="disable" class="btn btn-outline-warning">
+                    <i class="fa fa-edit" aria-hidden="true"></i>&nbsp;&nbsp;Edit
+                </button>
+
+                <button onclick="location.href ='index.php'" class="btn btn-outline-primary">
+                    <i class="fa fa-arrow-left" aria-hidden="true"></i>&nbsp;&nbsp;Go Back
+                </button>
+
+                <button onclick="location.href ='<?php echo $deleteURL ?>'" class="btn btn-outline-danger">
+                    <i class="fa fa-trash-o" aria-hidden="true"></i>&nbsp;&nbsp;Delete
+                </button>
+
             </div>
         </div>
         <hr/>
+
         <form action="index.php?controller=programmer&action=update" method="post">
+
+            <input hidden name="id" value="<?php echo $receivedData["proger"]->id; ?>">
 
             <div class="form-group">
                 <label for="first_name">Nume</label>
@@ -65,9 +76,15 @@
             <div class="form-group">
                 <label for="level">Level</label>
                 <select disabled name="level" id="level" type="level">
-                    <option value=1 <?php echo $receivedData['proger']->level == 1 ? "selected='selected'" : ""; ?>>Junior</option>
-                    <option value=2 <?php echo $receivedData['proger']->level == 2 ? "selected='selected'" : ""; ?>>Middle</option>
-                    <option value=3 <?php echo $receivedData['proger']->level == 3 ? "selected='selected'" : ""; ?>>Senior</option>
+                    <option value=1 <?php echo $receivedData['proger']->level == 1 ? "selected='selected'" : ""; ?>>
+                        Junior
+                    </option>
+                    <option value=2 <?php echo $receivedData['proger']->level == 2 ? "selected='selected'" : ""; ?>>
+                        Middle
+                    </option>
+                    <option value=3 <?php echo $receivedData['proger']->level == 3 ? "selected='selected'" : ""; ?>>
+                        Senior
+                    </option>
                 </select>
             </div>
 
@@ -88,7 +105,7 @@
             </div>
 
 
-            <button disabled id ="editBtn" type="submit" class="btn btn-primary">UPDATE DETAILS</button>
+            <button disabled id="editBtn" type="submit" class="btn btn-primary">UPDATE DETAILS</button>
         </form>
     </div>
 </div>

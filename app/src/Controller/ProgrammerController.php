@@ -29,6 +29,9 @@ class ProgrammerController
             case "assign":
                 $this->assign();
                 break;
+            case "unassign":
+                $this->unassign();
+                break;
             default:
                 $this->index();
                 break;
@@ -70,6 +73,18 @@ class ProgrammerController
         }
     }
 
+    public function unassign()
+    {
+        $proger = new Programmer();
+
+        $proger->setId($_GET['id']);
+        $proger->setDepartmentId($_GET['depId']);
+
+        $proger->unassignDepartment();
+
+        header("Location:index.php?controller=department&action=details&id=" . $_GET['depId']);
+    }
+
 
     public function details()
     {
@@ -106,23 +121,13 @@ class ProgrammerController
         header("Location:index.php");
     }
 
-    /**
-     * Crea una new bodega a partir de los parámetros POST
-     * y vuelve a cargar el index.php.
-     *
-     */
+
     public function create()
     {
         if (isset($_POST["first_name"]) && isset($_POST["last_name"])) {
 
-            $proger = new Programmer();
-            $proger->setId($_POST["id"]);
-            $proger->setFirstName($_POST["first_name"]);
-            $proger->setDepartmentId($_POST["department_id"]);
-            $proger->setLastName($_POST["last_name"]);
-            $proger->setLevel($_POST["level"]);
-            $proger->setPhone($_POST["phone"]);
-            $proger->setEmail($_POST["email"]);
+            $proger = $this->postProgData();
+
             $save = $proger->create();
         }
         header("Location:index.php");
@@ -131,33 +136,39 @@ class ProgrammerController
 
     public function update()
     {
+
         if (isset($_POST["id"])) {
 
 
-            $proger = new Programmer();
-            $proger->setId($_POST["id"]);
-            $proger->setFirstName($_POST["first_name"]);
-            $proger->setDepartmentId($_POST["department_id"]);
-            $proger->setLastName($_POST["last_name"]);
-            $proger->setLevel($_POST["level"]);
-            $proger->setPhone($_POST["phone"]);
-            $proger->setEmail($_POST["email"]);
+            $proger = $this->postProgData();
+
             $save = $proger->update();
         }
         header("Location:index.php");
     }
 
-
-    /**
-     * Crea la vista que le pasemos con los datos indicados.
-     *
-     */
     public function view($view, $data)
     {
         $receivedData = $data;
         $path =  __DIR__ . "/../../view/" . $view . "View.php";
         require_once $path;
 
+    }
+
+    /**
+     * @return Programmer
+     */
+    public function postProgData(): Programmer
+    {
+        $proger = new Programmer();
+        $proger->setId($_POST["id"]);
+        $proger->setFirstName($_POST["first_name"]);
+        $proger->setDepartmentId($_POST["department_id"]);
+        $proger->setLastName($_POST["last_name"]);
+        $proger->setLevel($_POST["level"]);
+        $proger->setPhone($_POST["phone"]);
+        $proger->setEmail($_POST["email"]);
+        return $proger;
     }
 
 }
