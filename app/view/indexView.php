@@ -5,8 +5,8 @@
             <div class="col-md-6">
                 <div class="mt-5 mb-3 clearfix">
                     <h2 class="pull-left">IT Departments</h2>
-                    <a href="index.php?controller=department&action=showNew" class="btn btn-success pull-right"><i
-                                class="fa fa-plus"></i> Add New Department</a>
+                    <button onclick="location.href = 'index.php?controller=department&action=showNew'" class="btn btn-success pull-right"><i
+                                class="fa fa-plus"></i> Add New Department</button>
                 </div>
                 <table class="table table-bordered table-striped">
                     <tbody>
@@ -43,12 +43,12 @@
                             <td><?php echo $dept['progs_count'] ?></td>
                             <td><?php echo $dept["level"] ?></td>
                             <td>
-                                <a class="btn btn-outline-primary"
-                                   href="index.php?controller=department&action=details&id=<?php echo $dept['id']; ?>">
-                                    <i class="fa fa-sign-in" aria-hidden="true"></i>&nbsp;&nbsp;Info</a>
-                                <a class="btn btn-outline-danger"
-                                   href="index.php?controller=department&action=delete&id=<?php echo $dept['id'] ?>">
-                                    <i class="fa fa-trash-o" aria-hidden="true"></i>&nbsp;&nbsp;Delete</a></td>
+                                <button class="btn btn-outline-primary" onclick="location.href =
+                                'index.php?controller=department&action=details&id=<?php echo $dept['id']; ?>'">
+                                    <i class="fa fa-sign-in" aria-hidden="true"></i>&nbsp;&nbsp;Info</button>
+                                <button class="btn btn-outline-danger" onclick="location.href =
+                                'index.php?controller=department&action=delete&id=<?php echo $dept['id']; ?>'">
+                                    <i class="fa fa-trash-o" aria-hidden="true"></i>&nbsp;&nbsp;Delete</button></td>
                             </td>
                         </tr>
 
@@ -66,8 +66,8 @@
             <div class="col-md-6">
                 <div class="mt-5 mb-3 clearfix">
                     <h2 class="pull-left">Progers</h2>
-                    <a href="index.php?controller=programmer&action=showNew" class="btn btn-success pull-right"><i
-                                class="fa fa-plus"></i> Add New Coder</a>
+                    <button onclick="location.href = 'index.php?controller=programmer&action=showNew'" class="btn btn-success pull-right"><i
+                                class="fa fa-plus"></i> Add New Coder</button>
                 </div>
                 <table class="table table-bordered table-striped">
                     <tbody>
@@ -102,13 +102,12 @@
                             <td><?php echo $proger['level'] ?></td>
                             <td><?php echo $proger['on_project'] ?></td>
                             <td>
-                                <a class="btn btn-outline-primary"
-                                   href="index.php?controller=programmer&action=details&id=<?php echo $proger['id']; ?>&department=<?php echo $proger["department_id"] ?>">
-                                    <i class="fa fa-info" aria-hidden="true"></i>Info</a>
+                                <button class="btn btn-outline-primary" onclick="location.href =
+                                        'index.php?controller=programmer&action=details&id=<?php echo $proger['id']; ?>&department=<?php echo $proger["department_id"] ?>'">
+                                    <i class="fa fa-info" aria-hidden="true"></i>Info</button>
 
-                                <a class="btn btn-outline-danger"
-                                   href="index.php?controller=programmer&action=delete&id=<?php echo $proger['id']; ?>">
-                                    <i class="fa fa-trash-o" aria-hidden="true"></i>Delete</a>
+                                <button class="btn btn-outline-danger" onclick="location.href = 'index.php?controller=programmer&action=delete&id=<?php echo $proger['id']; ?>'">
+                                    <i class="fa fa-trash-o" aria-hidden="true"></i>Delete</button>
 
 
                             </td>

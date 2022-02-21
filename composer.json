@@ -1,6 +1,7 @@
 {
     "require": {
-        "components/jquery": "^3.6"
+        "components/jquery": "^3.6",
+        "ext-pdo": "*"
     },
 
     "name": "oxyac/mvc-crud-php",

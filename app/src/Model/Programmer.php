@@ -2,6 +2,8 @@
 
 namespace App\Model;
 
+use Conf\Globals;
+
 class Programmer extends GenericModel
 {
 
@@ -16,7 +18,7 @@ class Programmer extends GenericModel
     public function __construct($connection)
     {
         parent::__construct($connection);
-        $this->table = TABLE_PROGRAMMERS;
+        $this->table = Globals::TABLE_PROGRAMMERS;
     }
 
     public function getByColumn($allProgs, $depId)

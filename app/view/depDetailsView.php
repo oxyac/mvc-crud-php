@@ -15,11 +15,10 @@
                             document.getElementById('project_name').disabled = false;
                             document.getElementById('language').disabled = false;
                         }</script>
-                    <a href="index.php" class="btn btn-outline-primary"><i class="fa fa-arrow-left"
-                                                                           aria-hidden="true"></i>&nbsp;Go
-                        Back</a>
-                    <a href="index.php?controller=department&action=delete&id=<?php echo $receivedData['department']->id ?>"
-                       class="btn btn-outline-danger"><i class="fa fa-trash-o" aria-hidden="true"></i>&nbsp;DELETE</a>
+                    <button onclick="location.href='index.php'" class="btn btn-outline-primary"><i class="fa fa-arrow-left"
+                                                                           aria-hidden="true"></i>&nbsp;Go Back</button>
+                    <button onclick="location.href='index.php?controller=department&action=delete&id=<?php echo $receivedData['department']->id ?>'"
+                       class="btn btn-outline-danger"><i class="fa fa-trash-o" aria-hidden="true"></i>&nbsp;DELETE</button>
                 </div>
 
                 <hr/>
@@ -70,16 +69,15 @@
 //                                    var_dump($proger['id'] . '&' . $receivedData['department']->id);
                                     ?>
 
-                                    <option name="id_depId" value=<?php echo $proger['id'] . '&' . $receivedData['department']->id ?>>
+                                    <option name="id_depId"
+                                            value=<?php echo $proger['id'] . '&' . $receivedData['department']->id ?>>
                                         <?php echo $proger['first_name'] . " " . $proger['last_name'] ?>
                                     </option>
-
 
 
                                 <?php } ?>
 
                             </select>
-
 
 
                             <button type="submit" class="btn btn-primary hide">Add Selected</button>
@@ -126,18 +124,11 @@
                             <td><?php echo $proger['level'] ?></td>
                             <td>
 
-                                <a href="index.php?controller=programmer&action=details&id=<?php echo $proger['id']; ?>&department=<?php echo $receivedData["department"]->id ?>
-                        class=" btn btn-outline-info">Info</a>
-                                <!--                    <a href="read.php?id='. $row['id'] .'" class="mr-3" title="View Record"-->
-                                <!--                       data-toggle="tooltip">-->
-                                <!--                        <span class="fa fa-phone"></span></a>-->
-                                <!--                    <a href="edit.php?id=-->
-                                <?php //echo $proger->id ?><!--" class=mr-3 title='Update Record' data-toggle=tooltip>-->
-                                <!--                        <span class='fa fa-pencil'></span></a>-->
-                                <!--                    <a onclick="idClass.id=-->
-                                <?php //echo $proger->id ?><!--" title="Delete Record" data-toggle='modal'-->
-                                <!--                       data-target='#deleteModal'>-->
-                                <!--                        <span class="fa fa-trash"></span></a>-->
+                                <button
+                                    <?php echo $receivedData['department']->head_id == $proger['id'] ? "disabled" : "" ?>
+                                        onclick="location.href = 'index.php?controller=programmer&action=update&id=<?php echo $proger['id']; ?>&department=<?php echo $receivedData["department"]->id ?>'"
+                                        class=" btn btn-outline-info">Set Head
+                                </button>
 
                             </td>
                         </tr>

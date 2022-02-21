@@ -2,7 +2,9 @@
 
 namespace App\Model;
 
+use Conf\Globals;
 use Exception;
+
 class Department extends GenericModel
 {
 
@@ -14,7 +16,7 @@ class Department extends GenericModel
     public function __construct($connection)
     {
         parent::__construct($connection);
-        $this->table = TABLE_DEPARTMENTS;
+        $this->table = Globals::TABLE_DEPARTMENTS;
 
     }
 
@@ -48,26 +50,28 @@ class Department extends GenericModel
         return $result;
     }
 
-   
-   public function countProgs(array $allDepts, array $progers)
-   {
-       $progPerDept = [];
-       foreach ($allDepts as $dept) {
-           foreach ($progers as $proger){
 
-           }
-       }
-   }
+    public function countProgs(array $allDepts, array $progers)
+    {
+        $progPerDept = [];
+        foreach ($allDepts as $dept) {
+            foreach ($progers as $proger) {
 
-   public function deleteById($id)
+            }
+        }
+    }
+
+    public function deleteById($id)
     {
         try {
             $statement = $this->connection->prepare("DELETE FROM " . $this->table . " WHERE id = ?");
             $statement->execute([$id]);
 
-            $statement = $this->connection->prepare("DELETE FROM " . $this->table . " WHERE id = ?");
+            $statement = $this->connection->prepare("UPDATE programator
+                                                     SET department_id = null
+                                                     WHERE department_id = ?");
             $statement->execute([$id]);
-            
+
             $this->connection = null;
         } catch (Exception $e) {
             echo ' ---COULD NOT DELETE--- ' . $e->getMessage();

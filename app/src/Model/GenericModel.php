@@ -14,8 +14,6 @@ class GenericModel
     public function __construct($connection)
     {
         $this->connection = $connection;
-//        var_dump($this->connection);
-        $this->table = TABLE_PROGRAMMERS;
 
     }
 
@@ -31,8 +29,6 @@ class GenericModel
 
     public function getAll()
     {
-
-
 
         $statement = $this->connection->prepare("SELECT * FROM " . $this->table);
         $statement->execute();
