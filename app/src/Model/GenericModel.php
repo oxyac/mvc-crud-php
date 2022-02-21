@@ -2,6 +2,7 @@
 
 namespace App\Model;
 
+use App\Controller\Database;
 use Exception;
 use PDO;
 
@@ -11,9 +12,9 @@ class GenericModel
     protected $connection;
     protected $id;
 
-    public function __construct($connection)
+    public function __construct()
     {
-        $this->connection = $connection;
+        $this->connection = Database::connectDb();
 
     }
 

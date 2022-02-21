@@ -15,9 +15,9 @@ class Programmer extends GenericModel
     private $phone;
     private $email;
 
-    public function __construct($connection)
+    public function __construct()
     {
-        parent::__construct($connection);
+        parent::__construct();
         $this->table = Globals::TABLE_PROGRAMMERS;
     }
 

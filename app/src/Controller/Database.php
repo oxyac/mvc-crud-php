@@ -8,38 +8,18 @@ use Conf\DbConfig;
 
 class Database{
 
-    
+    public static function connectDb(){
 
-    private $driver;
-    private $host, $user, $pass, $database;
-
-    public function __construct() {
-
-        // DbConfig::DB_DATABASE;
-
-        $this->driver=DbConfig::DB_DRIVER;
-        $this->host=DbConfig::DB_HOST;
-        $this->user=DbConfig::DB_USER;
-        $this->pass=DbConfig::DB_PASS;
-        $this->database=DbConfig::DB_DATABASE;
-    }
-
-    public function connectDb(){
-
-        $statement = $this->driver .':host='. $this->host .  ';dbname=' . $this->database;
+        $statement = DbConfig::DB_DRIVER .':host='. DbConfig::DB_HOST .  ';dbname=' . DbConfig::DB_DATABASE;
 
         try {
-            $connection = new PDO($statement, $this->user, $this->pass);
+            $connection = new PDO($statement, DbConfig::DB_USER, DbConfig::DB_PASS);
             $connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             return $connection;
         } catch (PDOException $e) {
-            throw new Exception('Could not connect to DB...' . $connection);
+            throw new Exception('Could not connect to DB...');
         }
     }
-
-//    public function closeDb(){
-//        $this->database = null;
-//    }
 
 
 }

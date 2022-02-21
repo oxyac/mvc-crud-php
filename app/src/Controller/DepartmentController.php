@@ -11,18 +11,6 @@ use App\Model\Department;
 class DepartmentController
 {
 
-    private $database;
-    private $connection;
-
-    public function __construct()
-    {
-
-
-        $this->database = new Database();
-        $this->connection = $this->database->connectDb();
-    }
-
-
     public function run($action)
     {
         switch ($action) {
@@ -51,8 +39,8 @@ class DepartmentController
     public function index()
     {
 
-        $dept = new Department($this->connection);
-        $proger = new Programmer($this->connection);
+        $dept = new Department();
+        $proger = new Programmer();
 
 
 
@@ -84,11 +72,11 @@ class DepartmentController
     {
 
 
-        $dept = new Department($this->connection);
+        $dept = new Department();
         $deptDetails = $dept->getById($_GET["id"]);
         $dept->setHeadId($deptDetails->head_id);
 
-        $proger = new Programmer($this->connection);
+        $proger = new Programmer();
         $allProgs = $proger->getAll();
 
         $progersByDept = $proger->getByColumn($allProgs, $_GET['id']);
@@ -97,9 +85,6 @@ class DepartmentController
 
         $headId = $dept->getHeadId();
 
-
-        //        var_dump( "->" . $team . "<-");
-        //        var_dump($deptDetails);
 
         $this->view("depDetails", array(
             "progers" => $progersToBeAdded,
@@ -113,7 +98,7 @@ class DepartmentController
     public function showNew()
     {
 
-        $proger = new Programmer($this->connection);
+        $proger = new Programmer();
         $progers = $proger->getAll();
 
 
@@ -126,10 +111,10 @@ class DepartmentController
     public function delete()
     {
 
-        $dept = new Department($this->connection);
+        $dept = new Department();
         $dept->deleteById($_GET["id"]);
 
-        $this->run('index');
+        header("Location: index.php");
     }
 
 
@@ -137,7 +122,7 @@ class DepartmentController
     {
         if (isset($_POST["project_name"])) {
 
-            $dept = new Department($this->connection);
+            $dept = new Department();
             $dept->setId($_POST["id"]);
             $dept->setHeadId($_POST["head_id"]);
             $dept->setLanguage($_POST["language"]);
@@ -152,7 +137,7 @@ class DepartmentController
     {
         if (isset($_POST["id"])) {
 
-            $dept = new Department($this->connection);
+            $dept = new Department();
             $dept->setId($_POST["id"]);
             $dept->setHeadId($_POST["head_id"]);
             $dept->setLanguage($_POST["language"]);

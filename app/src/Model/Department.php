@@ -13,9 +13,9 @@ class Department extends GenericModel
     private $language;
     private $project_name;
 
-    public function __construct($connection)
+    public function __construct()
     {
-        parent::__construct($connection);
+        parent::__construct();
         $this->table = Globals::TABLE_DEPARTMENTS;
 
     }

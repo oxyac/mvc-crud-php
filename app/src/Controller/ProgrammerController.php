@@ -7,18 +7,6 @@ use App\Model\Department;
 class ProgrammerController
 {
 
-    private $database;
-    private $connection;
-
-    public function __construct()
-    {
-
-        $this->database = new Database();
-        $this->connection = $this->database->connectDb();
-
-    }
-
-
     public function run($action)
     {
         switch ($action) {
@@ -49,9 +37,8 @@ class ProgrammerController
 
     public function index()
     {
-        $proger = new Programmer($this->connection);
+        $proger = new Programmer();
         $result = Programmer::parseLevel($proger->getAll());
-        //var_dump($result);
 
 
         $this->view("index", array(
@@ -64,7 +51,7 @@ class ProgrammerController
     {
         if(isset($_POST['id_depId'])){
 
-            $proger = new Programmer($this->connection);
+            $proger = new Programmer();
 
             $prog_dep = explode('&', $_POST['id_depId']);
 
@@ -87,10 +74,10 @@ class ProgrammerController
     public function details()
     {
 
-        $proger = new Programmer($this->connection);
-        $progerObj = $proger->getById($_GET["id"]);
+        $proger = new Programmer();
+        $dept = new Department();
 
-        $dept = new Department($this->connection);
+        $progerObj = $proger->getById($_GET["id"]);
         $depts = $dept->getAll();
 
 
@@ -113,7 +100,7 @@ class ProgrammerController
     public function delete()
     {
 
-        $proger = new Programmer($this->connection);
+        $proger = new Programmer();
         $proger->deleteById($_GET["id"]);
 
         header("Location:index.php");
@@ -128,7 +115,7 @@ class ProgrammerController
     {
         if (isset($_POST["first_name"]) && isset($_POST["last_name"])) {
 
-            $proger = new Programmer($this->connection);
+            $proger = new Programmer();
             $proger->setId($_POST["id"]);
             $proger->setFirstName($_POST["first_name"]);
             $proger->setDepartmentId($_POST["department_id"]);
@@ -147,7 +134,7 @@ class ProgrammerController
         if (isset($_POST["id"])) {
 
 
-            $proger = new Programmer($this->connection);
+            $proger = new Programmer();
             $proger->setId($_POST["id"]);
             $proger->setFirstName($_POST["first_name"]);
             $proger->setDepartmentId($_POST["department_id"]);
