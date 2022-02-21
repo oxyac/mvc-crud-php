@@ -58,11 +58,14 @@ class GenericModel
     {
 
         foreach ($deptArr as $id => $dept) {
-            $deptArr[$id]['progs_count'] = 1;
+            $deptArr[$id]['progs_count'] = 0;
             foreach ($progers as $proger) {
                 if ($dept['head_id'] == $proger['id']) {
                     $deptArr[$id]['head_name'] = ucwords($proger['first_name'] . " " . $proger['last_name']);
+                    
                 }
+                $deptArr[$id]['progs_count'] ++;
+
             }
         }
 

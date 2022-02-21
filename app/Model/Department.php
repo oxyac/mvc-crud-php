@@ -2,7 +2,7 @@
 
 namespace App\Model;
 
-
+use Exception;
 class Department extends GenericModel
 {
 
@@ -21,6 +21,7 @@ class Department extends GenericModel
 
     public function insert()
     {
+        var_dump($this->table);
         $statement = $this->connection->prepare("INSERT INTO " . $this->table . " 
         (head_id, language, project_name) VALUES (?, ?, ?)");
 
@@ -47,16 +48,32 @@ class Department extends GenericModel
         return $result;
     }
 
-    //TODO
-//    public function countProgs(array $allDepts, array $progers)
-//    {
-//        $progPerDept = [];
-//        foreach ($allDepts as $dept) {
-//            foreach ($progers as $proger){
-//
-//            }
-//        }
-//    }
+   
+   public function countProgs(array $allDepts, array $progers)
+   {
+       $progPerDept = [];
+       foreach ($allDepts as $dept) {
+           foreach ($progers as $proger){
+
+           }
+       }
+   }
+
+   public function deleteById($id)
+    {
+        try {
+            $statement = $this->connection->prepare("DELETE FROM " . $this->table . " WHERE id = ?");
+            $statement->execute([$id]);
+
+            $statement = $this->connection->prepare("DELETE FROM " . $this->table . " WHERE id = ?");
+            $statement->execute([$id]);
+            
+            $this->connection = null;
+        } catch (Exception $e) {
+            echo ' ---COULD NOT DELETE--- ' . $e->getMessage();
+            return -1;
+        }
+    }
 
     /**
      * @return mixed

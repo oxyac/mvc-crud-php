@@ -1,7 +1,6 @@
 <?php
 
 use App\Controller\DepartmentController;
-use App\Controller\ProgrammerController;
 
 require_once '../vendor/autoload.php';
 include '../app/config/globals.php';

@@ -40,7 +40,7 @@
                             <td><?php echo ucwords(...explode(" ", $dept["project_name"])) ?></td>
                             <td><?php echo $dept['language']; ?></td>
                             <td><?php echo $dept['head_name'] ?></td>
-                            <td><?php echo "\$dept['progs_count']" ?></td>
+                            <td><?php echo $dept['progs_count'] ?></td>
                             <td><?php echo $dept["level"] ?></td>
                             <td>
                                 <a class="btn btn-outline-primary"

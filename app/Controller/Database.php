@@ -13,8 +13,8 @@ class Database{
 
         $this->driver="mysql";
         $this->host="localhost";
-        $this->user="og";
-        $this->pass="ghimpolism";
+        $this->user="root";
+        $this->pass="jsd67FGa";
         $this->database="og_db";
     }
 
@@ -27,7 +27,7 @@ class Database{
             $connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             return $connection;
         } catch (PDOException $e) {
-            throw new Exception('Could not connect to DB...');
+            throw new Exception('Could not connect to DB...' . $connection);
         }
     }
 

@@ -53,12 +53,16 @@ class DepartmentController{
         $proger = new Programmer($this->connection);
 
 
-        $allDepts = $dept->assignKeys($dept->getAll());
+        
 
         $progers = Programmer::parseLevel($proger->assignKeys($proger->getAll()));
-        $allDepts = $dept->parseHeadName($allDepts, $progers);
 
-        //$progPerDept = $dept->countProgs($allDepts, $progers);
+        $allDepts = $dept->parseHeadName($dept->assignKeys($dept->getAll()), $progers);
+        //$allDepts = $dept->parseHeadName($allDepts, $progers);
+
+        
+        var_dump($allDepts);
+        //$progerCountPerDept = $dept->countProgs($allDepts, $progers);
 
         $progers = $proger->parseDepartmentName($progers, $allDepts);
 
