@@ -4,6 +4,9 @@ namespace App\Controller;
 use App\Model\Programmer;
 use App\Model\Department;
 
+
+
+
 class ProgrammerController
 {
 
@@ -124,13 +127,20 @@ class ProgrammerController
 
     public function create()
     {
+        var_dump($_POST);
+
         if (isset($_POST["first_name"]) && isset($_POST["last_name"])) {
 
             $proger = $this->postProgData();
 
             $save = $proger->create();
+
+            echo('SUCCESS');
         }
-        header("Location:index.php");
+        else{
+            echo('FAILED');
+        }
+
     }
 
 

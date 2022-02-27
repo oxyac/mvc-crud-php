@@ -6,7 +6,6 @@ namespace App\Controller;
 use App\Model\Programmer;
 use App\Model\Department;
 
-//require_once 'Database.php';
 
 class DepartmentController
 {
@@ -41,11 +40,8 @@ class DepartmentController
 
     public function index()
     {
-
         $dept = new Department();
         $proger = new Programmer();
-
-
 
 
         $progers = Programmer::parseLevel($proger->assignKeys($proger->getAll()));
@@ -60,7 +56,7 @@ class DepartmentController
 
 
 
-        $this->view("index", array(
+        echo json_encode(array(
             "depId_count" => $progerCountPerDept,
             "progers" => $progers,
             "departments" => $allDepts,
@@ -88,7 +84,7 @@ class DepartmentController
         $headId = $dept->getHeadId();
 
 
-        $this->view("depDetails", array(
+        echo json_encode(array(
             "progers" => $unassignedProgs,
             "department" => $deptDetails,
             "team" => $team,

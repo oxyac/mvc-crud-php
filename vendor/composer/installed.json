@@ -53,5 +53,6 @@
             "install-path": "../components/jquery"
         }
     ],
-    "dev": true
+    "dev": true,
+    "dev-package-names": []
 }
