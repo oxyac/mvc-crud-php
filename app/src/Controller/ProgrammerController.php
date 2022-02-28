@@ -127,15 +127,25 @@ class ProgrammerController
 
     public function create()
     {
-        var_dump($_POST);
+        header('Content-Type: application/json; charset=utf-8');
 
-        if (isset($_POST["first_name"]) && isset($_POST["last_name"])) {
+        $json = file_get_contents('php://input');
+        $data = json_decode($json);
+        var_dump($data);
 
-            $proger = $this->postProgData();
+        if ($data->first_name && $data->last_name) {
 
-            $save = $proger->create();
+            $proger = new Programmer();
+            $proger->setFirstName($data->first_name);
+            //$proger->setDepartmentId($_POST["department_id"]);
+            $proger->setLastName($data->last_name);
+            $proger->setLevel($data->level);
+            $proger->setPhone($data->phone);
+            $proger->setEmail($data->email);
 
-            echo('SUCCESS');
+            $proger->create();
+
+            http_response_code(200);
         }
         else{
             echo('FAILED');

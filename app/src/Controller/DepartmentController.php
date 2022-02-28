@@ -128,24 +128,35 @@ class DepartmentController
     public function delete()
     {
 
+
         $dept = new Department();
+        echo $_GET["id"];
         $dept->deleteById($_GET["id"]);
 
-        header("Location: index.php");
+
     }
 
 
     public function create()
     {
-        if (isset($_POST["project_name"])) {
+        header('Content-Type: application/json; charset=utf-8');
+
+        $json = file_get_contents('php://input');
+        $data = json_decode($json);
+
+        if ($data->project_name && $data->language) {
 
             $dept = new Department();
-            $dept->setId($_POST["id"]);
-            $dept->setLanguage($_POST["language"]);
-            $dept->setProjectName($_POST["project_name"]);
-            $save = $dept->insert();
+            $dept->setProjectName($data->project_name);
+            $dept->setLanguage($data->language);
+
+            $dept->create();
+
+            echo  http_response_code(200);
         }
-        $this->run('index.php');
+        else{
+            echo 'Failed';
+        }
     }
 
 

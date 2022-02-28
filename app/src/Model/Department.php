@@ -21,9 +21,8 @@ class Department extends GenericModel
     }
 
 
-    public function insert()
+    public function create()
     {
-        var_dump($this->table);
         $statement = $this->connection->prepare("INSERT INTO " . $this->table . " 
         (head_id, language, project_name) VALUES (?, ?, ?)");
 
