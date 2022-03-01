@@ -69,6 +69,7 @@ class DepartmentController
     {
 
 
+
         $dept = new Department();
         $deptDetails = $dept->getById($_GET["id"]);
         $dept->setHeadId($deptDetails->head_id);
@@ -77,9 +78,12 @@ class DepartmentController
         $allProgs = $proger->getAll();
 
         $progersByDept = $proger->getByColumn($allProgs, $_GET['id']);
+
         $team = Programmer::parseLevel($proger->assignKeys($progersByDept));
+        $team = Programmer::toArray($team);
 
         $unassignedProgs = $proger->fetchUnassignedProgers($allProgs);
+
 
         $headId = $dept->getHeadId();
 
@@ -108,21 +112,23 @@ class DepartmentController
 
     public function setHead(){
 
+        if(isset($_GET["id"])){
+            $dept = new Department();
 
-        $dept = new Department();
-
-
-        $prog_id = $_GET["id"];
-        $dep_id = $_GET['depId'];
-        var_dump($dep_id, " ",  $prog_id);
+            $prog_id = $_GET["id"];
+            $dep_id = $_GET['depId'];
 
 
-        $dept->setId($dep_id);
-        $dept->setHeadId($prog_id);
+            $dept->setId($dep_id);
+            $dept->setHeadId($prog_id);
 
-        $dept->updateHeadId();
+            $dept->updateHeadId();
 
-        header("Location:index.php?controller=department&action=details&id=" . $dep_id);
+            echo http_response_code(200);
+        }
+
+
+
     }
 
     public function delete()
@@ -162,15 +168,19 @@ class DepartmentController
 
     public function update()
     {
-        if (isset($_POST["id"])) {
+
+        $json = file_get_contents('php://input');
+        $data = json_decode($json);
+
+        if (isset($_GET["id"])) {
 
             $dept = new Department();
-            $dept->setId($_POST["id"]);
-            $dept->setLanguage($_POST["language"]);
-            $dept->setProjectName($_POST["project_name"]);
+            $dept->setId($data->id);
+            $dept->setLanguage($data->language);
+            $dept->setProjectName($data->project_name);
             $save = $dept->update();
+
         }
-        header("Location:index.php?Controller=department&action=details&id=" . $_POST["id"]);
     }
 
 

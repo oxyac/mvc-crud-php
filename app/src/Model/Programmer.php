@@ -146,6 +146,15 @@ class Programmer extends GenericModel
         return $progers;
     }
 
+    public static function toArray($objects): array
+    {
+        $teamArr = [];
+        foreach ($objects as $member){
+            $teamArr[] = $member;
+        }
+        return $teamArr ;
+    }
+
     /**
      * @return mixed
      */

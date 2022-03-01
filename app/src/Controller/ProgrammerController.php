@@ -55,11 +55,13 @@ class ProgrammerController
 
     public function assign()
     {
-        if(isset($_POST['id_depId'])){
+
+
+        if(isset($_GET['id_depId'])){
 
             $proger = new Programmer();
 
-            $prog_dep = explode('&', $_POST['id_depId']);
+            $prog_dep = explode('_', $_GET['id_depId']);
 
             $prog_id = $prog_dep[0];
             $dep_id = $prog_dep[1];
@@ -69,10 +71,6 @@ class ProgrammerController
 
             $proger->assignDepartment();
 
-            header("Location:index.php?controller=department&action=details&id=" . $dep_id);
-        }
-        else{
-            header("Location:index.php");
         }
     }
 
@@ -85,7 +83,6 @@ class ProgrammerController
 
         $proger->unassignDepartment();
 
-        header("Location:index.php?controller=department&action=details&id=" . $_GET['depId']);
     }
 
 
